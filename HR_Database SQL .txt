@@ -1,0 +1,282 @@
+﻿******************************************************
+Create a database named HR_Database
+******************************************************
+CREATE DATABASE "HR_Database"
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_United States.1252'
+    LC_CTYPE = 'English_United States.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+
+*****************************************************
+Create tables in HR_Database based on Physical ERD
+*****************************************************
+
+
+create table employee(
+        emp_id varchar(25) NOT NULL PRIMARY KEY,
+        emp_nm        varchar(25),
+        hire_date date
+);
+
+
+create table department(
+        department varchar(25) NOT NULL PRIMARY KEY
+);
+
+
+create table employee_information(
+        emp_id varchar(25) NOT NULL,
+        emp_nm varchar(25),
+        manager varchar(20),
+        hire_date date,
+        end_date date,
+        department varchar(25) NOT NULL
+);
+        
+create table manager(
+        emp_id varchar(25) NOT NULL,
+        emp_nm varchar(25),
+        department varchar(25) NOT NULL,
+        start_date date
+);
+
+
+create table salary(
+        emp_nm varchar(25) NOT NULL,
+        salary varchar(20) NOT NULL,
+        hire_date date
+);
+
+
+create table location(
+        emp_nm varchar(25) NOT NULL,
+        address varchar(25) NOT NULL,
+        city varchar(25) NOT NULL,
+        state varchar(10) NOT NULL
+);
+
+
+create table education(
+        emp_id varchar(25) NOT NULL,
+        emp_nm varchar(35),
+        education_level varchar(50) NOT NULL
+);
+
+
+create table title(
+        emp_id varchar(25) NOT NULL,
+        job_title varchar(35) NOT NULL,
+        hire_date date,
+        emp_nm varchar(25),
+        department varchar(50)
+);
+
+
+***********************************************************
+Create a table for the hr-dataset.csv for staging
+***********************************************************
+
+
+create table hrstagingdataset(
+        emp_id varchar(25) NOT NULL,
+        emp_nm varchar(25),
+        email varchar(50),
+        hire_date date,
+        job_title varchar(35),
+        salary varchar(20), 
+        department varchar(20),
+        manager varchar(20),
+        start_date date,
+        end_date date,
+        location varchar(25),
+        address varchar (25),
+        city varchar (20),
+        state varchar (10),
+        education_level varchar(50) NOT NULL
+);
+
+
+*************************************************************
+Load the HR Dataset to the table "hrstagingdataset" created.
+*************************************************************
+
+
+COPY hrstagingdataset(emp_id, emp_nm, email, hire_date, job_title, salary, 
+department, manager, start_date, end_date, location, address, city, state, education_level) 
+FROM 'C:\Temp\hrdataset.xlsx_HR Data.csv' DELIMITER ',' CSV HEADER;
+
+
+HR Dataset is located at c:\Temp\hrdataset.xlsx_HR Data.csv
+
+
+select * from hrstagingdataset
+LIMIT 10; 
+
+
+**************************************************************
+Add FOREIGN KEY CONSTRAINT to the tables
+**************************************************************
+
+
+ALTER TABLE employee_information
+ADD CONSTRAINT depart_nm_foreign_key FOREIGN KEY (depart_nm)
+REFERENCES department (depart_nm);
+
+
+ALTER TABLE manager
+ADD CONSTRAINT depart_nm_foreign_key FOREIGN KEY (depart_nm)
+REFERENCES department (depart_nm);
+
+
+ALTER TABLE employee
+ADD CONSTRAINT emp_id_foreign_key FOREIGN KEY (emp_id)
+REFERENCES employee_information (emp_id);
+
+
+ALTER TABLE manager
+ADD CONSTRAINT emp_id_foreign_key FOREIGN KEY (emp_id)
+REFERENCES employee (emp_id);
+
+
+*************************************************************
+Extract Transform and Load data to.......... each table
+*************************************************************
+
+
+INSERT INTO "Table A" ("COLUMN_NAME_1")
+SELECT "COLUMN_NAME_2" FROM "Table B";
+
+
+
+
+INSERT INTO "department" ("department")
+SELECT distinct "department" FROM "hrstagingdataset";
+
+
+                select * from department;
+                
+INSERT INTO "education" ("emp_id", "emp_nm","education_level")
+SELECT distinct "emp_id", "emp_nm", "education_level" FROM "hrstagingdataset";
+
+
+                select * from education;
+
+
+INSERT INTO "employee" ("emp_id", "emp_nm", "hire_date")
+SELECT distinct "emp_id", "emp_nm", "hire_date" FROM "hrstagingdataset";
+
+
+                select * from employee;
+
+
+INSERT INTO "employee_information" ("emp_id", "emp_nm", "manager", "hire_date", "end_date", "department")
+SELECT distinct "emp_id", "emp_nm", "manager", "hire_date", "end_date", "department" FROM "hrstagingdataset";
+
+
+                select * from employee_information;
+
+
+INSERT INTO "location" ( "emp_nm","address", "city", "state")
+SELECT distinct "emp_nm","address", "city", "state" FROM "hrstagingdataset";
+
+
+                select * from location;
+                
+INSERT INTO "manager" ("emp_id", "emp_nm","department", "start_date")
+SELECT distinct "emp_id", "emp_nm", "department", "start_date" FROM "hrstagingdataset";
+
+
+                select * from manager;                
+
+
+INSERT INTO "salary" ( "emp_nm","salary", "hire_date")
+SELECT distinct "emp_nm","salary", "hire_date" FROM "hrstagingdataset";
+
+
+                select * from salary;
+
+
+INSERT INTO "title" ("emp_id", "job_title","hire_date", "emp_nm", "department")
+SELECT distinct "emp_id", "job_title", "hire_date", "emp_nm", "department" FROM "hrstagingdataset";
+
+
+                select * from title;
+
+
+*****************************************************
+Insert a new job title "Web Programmer"
+*****************************************************
+INSERT INTO products (product_no, name, price) VALUES (1, 'Cheese', 9.99);
+
+
+
+
+INSERT INTO title (emp_id, job_title, emp_nm, department) values (1, 'Web Programmer',' ',' ');
+
+
+select * from title 
+where job_title = 'Web Programmer'
+
+
+
+
+*****************************************************
+Correct Web Programmer to Web Developer
+*****************************************************
+
+
+UPDATE title 
+SET job_title = 'Web Developer'
+WHERE job_title = 'Web Programmer';
+
+
+Select * from title
+where job_title = 'Web Developer'
+
+
+
+
+*****************************************************
+Delete Web Developer from the table
+*****************************************************
+
+
+DELETE FROM table_name
+WHERE condition;
+
+
+DELETE FROM title
+WHERE job_title = 'Web Developer';
+
+
+Select * from title
+where job_title = 'Web Developer'
+
+
+
+
+*****************************************************
+How many employees in each department
+******************************************************
+
+
+SELECT COUNT(*) FROM employee_information GROUP BY Department;
+ 
+ 
+Select "department", COUNT("emp_id") from "employee_information"
+GROUP BY "department";
+
+
+
+
+*****************************************************
+Toni Lembeck|emp_nm, job_title, department, manager, start_date and end_date 
+*****************************************************
+
+
+select * from employee_information
+where emp_nm = 'Toni Lembeck';
