@@ -2,7 +2,7 @@
 
 Background
 
-Typically, small business organizations start to gather and store information in a spreadsheet simply becasuse needs and requirements are limited. As business grows, there is the need for expansion in different areas of operation. The need and pain identified form the basis for this experiment of creating a Postgres database from the available Excel worksheet, applying ETL pipeline and finally migrating the data to Amazon Cloud environment.
+Typically, small business organizations start to gather and store information in a spreadsheet simply becasuse needs and requirements are limited. As business grows, there is the need for expansion in different areas of operation. The need and pain identified form the basis for this experiment of creating a Postgres database from the available data in Excel worksheet, applying ETL pipeline and finally migrating the data to Amazon Cloud environment.
 
 
 Problem Description / Business Requirement
