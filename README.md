@@ -1,4 +1,4 @@
-# Database-Design-and-AWS Cloud-Migration
+# Enterprise Data Lake and Database Design and AWS Cloud-Migration
 
 Background
 
@@ -14,3 +14,7 @@ As such, the HR department has tasked you, as the new data architect, to design 
 Dataset
 
 The HR department at (Gamepoint) provided an Excel workbook consisting of 310 records, with 14 columns. The data is in human-readable format and has not been normalized at all. The data lists the names of employees at Gamepoint Corp, as well as information such as job title, department, manager's name, hire date, start date, end date, work location, and salary.
+
+Data Lake Archiecture
+
+A design of an enterprise Data Lake architecture for a medical data processing company with requirementsfor expansion and cloud-migration.
